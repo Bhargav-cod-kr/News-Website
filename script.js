@@ -3,36 +3,29 @@ const url = "https://newsapi.org/v2/everything?q=";
 
 window.addEventListener('load', () => fetchNews("India"));
 
-function reload() {
-    window.location.reload();
-}
-
 async function fetchNews(query) {
     try {
-        const res = await fetch(`${url}${query}&apikey=${API_KEY}`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Upgrade-Insecure-Requests': '1'
-            }
-        });
+        const response = await fetch(`${url}${query}&apikey=${API_KEY}`);
 
-        if (res.status === 426) {
+        console.log('Request URL:', `${url}${query}&apikey=${API_KEY}`);
+        console.log('Response Status:', response.status);
+        console.log('Response Headers:', response.headers);
+
+        if (response.status === 426) {
             throw new Error("HTTP 426: Upgrade required. Please ensure your request is using HTTPS.");
         }
 
-        if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const data = await res.json();
+        const data = await response.json();
+        console.log(data);
 
         if (!data.articles) {
             throw new Error("Data format error: 'articles' property is missing");
         }
 
-        console.log(data);
         bindData(data.articles);
 
     } catch (error) {
@@ -54,9 +47,7 @@ function bindData(articles) {
         if (!article.urlToImage) return;
 
         const cardClone = newsCardTemplate.content.cloneNode(true);
-
         fillDataInCard(cardClone, article);
-
         cardContainer.appendChild(cardClone);
     });
 }
@@ -76,7 +67,6 @@ function fillDataInCard(cardClone, article) {
     });
 
     newsSource.innerHTML = `${article.source.name} : ${date}`;
-
     cardClone.firstElementChild.addEventListener('click', () => {
         window.open(article.url, "_blank");
     });
