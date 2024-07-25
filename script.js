@@ -10,8 +10,11 @@ function reload() {
 async function fetchNews(query) {
     try {
         const res = await fetch(`${url}${query}&apikey=${API_KEY}`, {
+            method: 'GET',
             headers: {
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Upgrade-Insecure-Requests': '1'
             }
         });
 
