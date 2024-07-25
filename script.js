@@ -15,6 +15,10 @@ async function fetchNews(query) {
             }
         });
 
+        if (res.status === 426) {
+            throw new Error("HTTP 426: Upgrade required. Please ensure your request is using HTTPS.");
+        }
+
         if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
         }
@@ -34,6 +38,11 @@ async function fetchNews(query) {
 }
 
 function bindData(articles) {
+    if (!articles || articles.length === 0) {
+        console.error("No articles available to display");
+        return;
+    }
+
     const cardContainer = document.getElementById('card_container');
     const newsCardTemplate = document.getElementById('template_news_card');
 
