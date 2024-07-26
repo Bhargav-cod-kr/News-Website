@@ -1,5 +1,4 @@
-const API_KEY = "e74108a4e48c46e2be12963a2c7e2d14";
-const url = "https://newsapi.org/v2/everything?q=";
+
 
 window.addEventListener('load', () => fetchNews("India"));
 
